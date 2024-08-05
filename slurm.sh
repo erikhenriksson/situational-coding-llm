@@ -50,7 +50,7 @@ if [[ -z "$SLURM_JOB_ID" ]]; then
     shift 
   fi
 else
-    OLLAMA_MODELS=/scratch/project_2010911/ollama ~/bin/ollama serve&
+    #OLLAMA_MODELS=/scratch/project_2010911/ollama ~/bin/ollama serve&
 fi
 
 
