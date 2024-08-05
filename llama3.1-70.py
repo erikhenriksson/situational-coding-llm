@@ -18,7 +18,7 @@ login(token=os.getenv("HUGGINGFACE_ACCESS_TOKEN", ""))
 model_id = "hugging-quants/Meta-Llama-3.1-70B-Instruct-AWQ-INT4"
 quantization_config = AwqConfig(
     bits=4,
-    fuse_max_seq_len=100000,  # Note: Update this as per your use-case
+    fuse_max_seq_len=10000,  # Note: Update this as per your use-case
     do_fuse=True,
 )
 
