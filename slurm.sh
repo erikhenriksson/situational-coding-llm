@@ -67,7 +67,7 @@ fi
   touch $LOG_FILE
   echo "Log file: $LOG_FILE"
   # Use tail -f to follow the log file
-  #tail -f "$LOG_FILE"
+  tail -f "$LOG_FILE"
   exit $?
 else
   # Actual job script starts here
