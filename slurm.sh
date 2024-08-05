@@ -67,7 +67,7 @@ if [[ -z "$SLURM_JOB_ID" ]]; then
   exit $?
 else
   export OLLAMA_MODELS="/scratch/project_2010911/ollama"
-  ~/bin/ollama serve&
+  srun /users/ehenriks/bin/ollama serve &
   # Actual job script starts here
   source venv/bin/activate
   srun python3 "$@"
