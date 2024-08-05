@@ -66,8 +66,8 @@ if [[ -z "$SLURM_JOB_ID" ]]; then
   tail -f "$LOG_FILE"
   exit $?
 else
+  srun env OLLAMA_MODELS=/scratch/project_2010911/ollama nohup /users/ehenriks/bin/ollama serve > ollama_output.log 2>&1 &
 
-  srun OLLAMA_MODELS=/scratch/project_2010911/ollama /users/ehenriks/bin/ollama serve &
   # Actual job script starts here
   source venv/bin/activate
   srun python3 "$@"
