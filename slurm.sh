@@ -49,8 +49,10 @@ if [[ -z "$SLURM_JOB_ID" ]]; then
     MEM=8
     shift 
   fi
+else
+    OLLAMA_MODELS=/scratch/project_2010911/ollama ~/bin/ollama serve&
+fi
 
-  OLLAMA_MODELS=/scratch/project_2010911/ollama ~/bin/ollama serve&
 
   # Set the dynamic GPU requirement
   GRES_GPU="gpu:a100:$NUM_GPUS"
