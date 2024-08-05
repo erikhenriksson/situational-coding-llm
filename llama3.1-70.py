@@ -128,7 +128,7 @@ def generate(text):
 
 def process_tsv_file(input_file, output_file):
     with gzip.open(input_file, "rt", encoding="utf-8") as infile, open(
-        output_file, "w", newline=""
+        output_file.replace(".gz", ""), "w", newline=""
     ) as outfile:
         reader = csv.reader(infile, delimiter="\t")
         writer = csv.writer(outfile, delimiter="\t")
