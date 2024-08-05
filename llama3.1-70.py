@@ -1,5 +1,10 @@
 import os
 
+os.environ["HF_HOME"] = ".hf/hf_home"
+os.environ["XDG_CACHE_HOME"] = ".hf/xdg_cache_home"
+os.environ["HF_DATASETS_CACHE"] = ".hf/datasets_cache"
+os.environ["WANDB_DISABLED"] = "true"
+
 import torch
 import transformers
 from dotenv import load_dotenv
