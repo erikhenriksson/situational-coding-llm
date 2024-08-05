@@ -1,4 +1,5 @@
 import os
+import prompts
 
 os.environ["HF_HOME"] = ".hf/hf_home"
 os.environ["XDG_CACHE_HOME"] = ".hf/xdg_cache_home"
@@ -46,7 +47,7 @@ inputs = tokenizer.apply_chat_template(
     return_dict=True,
 ).to("cuda")
 
-outputs = model.generate(**inputs, do_sample=True, max_new_tokens=256)
+outputs = model.generate(**inputs, do_sample=True, temperature=0.01, max_new_tokens=512)
 print(
     tokenizer.batch_decode(
         outputs[:, inputs["input_ids"].shape[1] :], skip_special_tokens=True
