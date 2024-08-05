@@ -12,7 +12,7 @@ os.environ["WANDB_DISABLED"] = "true"
 import torch
 from dotenv import load_dotenv
 from huggingface_hub import login
-from transformers import AutoModelForCausalLM, AutoTokenizer, AwqConfig
+from transformers import AutoModelForCausalLM, AutoTokenizer, AwqConfig, pipeline
 
 load_dotenv()
 
@@ -36,6 +36,7 @@ model = AutoModelForCausalLM.from_pretrained(
 )
 """
 
+"""
 # Load the model and tokenizer
 model_id = "meta-llama/Meta-Llama-3.1-70B-Instruct"
 model = AutoModelForCausalLM.from_pretrained(model_id, torch_dtype=torch.float16)
@@ -44,6 +45,19 @@ tokenizer = AutoTokenizer.from_pretrained(model_id)
 # Move the model to GPU
 device = "cuda" if torch.cuda.is_available() else "cpu"
 model.to(device)
+
+"""
+
+model_id = "meta-llama/Meta-Llama-3.1-70B-Instruct"
+pipe = pipeline(
+    "text-generation",
+    model=model_id,
+    model_kwargs={
+        "torch_dtype": torch.bfloat16,
+        "quantization_config": {"load_in_4bit": True},
+    },
+    device="cuda",
+)
 
 
 sit_char_params = {
@@ -118,6 +132,7 @@ def generate(text):
         },
         {"role": "user", "content": prompts.MESSAGE.format(text)},
     ]
+    """
     inputs = tokenizer.apply_chat_template(
         prompt,
         tokenize=True,
@@ -133,7 +148,18 @@ def generate(text):
         outputs[:, inputs["input_ids"].shape[1] :], skip_special_tokens=True
     )[0]
 
-    result = parse_llm_output(output_parsed)
+    """
+
+    outputs = pipe(
+        prompt,
+        max_new_tokens=1024,
+        do_sample=True,
+        temperature=0.01,
+    )
+    assistant_response = outputs[0]["generated_text"][-1]["content"]
+    # print(assistant_response)
+
+    result = parse_llm_output(assistant_response)
 
     return result
 
