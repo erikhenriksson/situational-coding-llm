@@ -2,6 +2,7 @@ import os
 import prompts
 import csv
 import gzip
+import re
 
 os.environ["HF_HOME"] = ".hf/hf_home"
 os.environ["XDG_CACHE_HOME"] = ".hf/xdg_cache_home"
@@ -17,7 +18,7 @@ load_dotenv()
 
 login(token=os.getenv("HUGGINGFACE_ACCESS_TOKEN", ""))
 
-
+"""
 model_id = "hugging-quants/Meta-Llama-3.1-70B-Instruct-AWQ-INT4"
 quantization_config = AwqConfig(
     bits=4,
@@ -33,6 +34,17 @@ model = AutoModelForCausalLM.from_pretrained(
     device_map="auto",
     quantization_config=quantization_config,
 )
+"""
+
+# Load the model and tokenizer
+model_id = "meta-llama/Meta-Llama-3.1-70B-Instruct"
+model = AutoModelForCausalLM.from_pretrained(model_id, torch_dtype=torch.float16)
+tokenizer = AutoTokenizer.from_pretrained(model_id)
+
+# Move the model to GPU
+device = "cuda" if torch.cuda.is_available() else "cpu"
+model.to(device)
+
 
 sit_char_params = {
     "a spoken transcript": 0,
