@@ -49,10 +49,6 @@ if [[ -z "$SLURM_JOB_ID" ]]; then
     MEM=8
     shift 
   fi
-else
-    #OLLAMA_MODELS=/scratch/project_2010911/ollama ~/bin/ollama serve&
-fi
-
 
   # Set the dynamic GPU requirement
   GRES_GPU="gpu:a100:$NUM_GPUS"
@@ -70,6 +66,7 @@ fi
   tail -f "$LOG_FILE"
   exit $?
 else
+  OLLAMA_MODELS="/scratch/project_2010911/ollama" ~/bin/ollama serve&
   # Actual job script starts here
   source venv/bin/activate
   srun python3 "$@"
