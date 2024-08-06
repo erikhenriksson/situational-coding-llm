@@ -95,7 +95,7 @@ def generate_model():
 
     url = "http://localhost:11434/api/create"
     modelfile = f'''
-            FROM llama3.1-70
+            FROM llama3.1-70B
             PARAMETER temperature 0.01
             SYSTEM """{prompts.SYSTEM}"""
         '''
@@ -156,8 +156,8 @@ input_file = f"{input_path}/{io_file}"
 max_tries = 20
 tries = 0
 
-print("waiting 30 seconds just to be sure")
-time.sleep(30)
+print("waiting 5 seconds just to be sure")
+time.sleep(5)
 print("done")
 
 
