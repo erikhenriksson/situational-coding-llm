@@ -10,51 +10,42 @@ For each item, select the number that best represents the text. The scale runs f
 
 Here are the 23 parameters you will be coding for:
 
-**The text is:**
-
-- a spoken transcript [1-6] (explanation)
-- lyrical or artistic [1-6] (explanation)
-- pre-planned and edited [1-6] (explanation)
-- interactive [1-6] (explanation)
-
-**The author/speaker:**
-
-- is an expert [1-6] (explanation)
-- focuses on himself/herself [1-6] (explanation)
-- assumes technical background knowledge [1-6] (explanation)
-- assumes cultural/social knowledge [1-6] (explanation)
-- assumes personal knowledge about himself/herself [1-6] (explanation)
-
-**The purpose of this text is to:**
-
-- narrate past events [1-6] (explanation)
-- explain information [1-6] (explanation)
-- describe a person, place, thing or idea [1-6] (explanation)
-- persuade the reader [1-6] (explanation)
-- entertain the reader [1-6] (explanation)
-- sell a product or service [1-6] (explanation)
-- give advice or recommendations [1-6] (explanation)
-- provide 'how-to' instructions [1-6] (explanation)
-- express opinions [1-6] (explanation)
-
-**The basis of information is:**
-
-- common knowledge [1-6] (explanation)
-- direct quotes [1-6] (explanation)
-- factual/scientific evidence [1-6] (explanation)
-- opinion [1-6] (explanation)
-- personal experience [1-6] (explanation)
+[P1] the text is a spoken transcript [1-6] (explanation)
+[P2] the text is lyrical or artistic [1-6] (explanation)
+[P3] the text is pre-planned and edited [1-6] (explanation)
+[P4] the text is interactive [1-6] (explanation)
+[P5] the author or speaker is an expert [1-6] (explanation)
+[P6] the author or speaker focuses on himself/herself [1-6] (explanation)
+[P7] the author or speaker assumes technical background knowledge [1-6] (explanation)
+[P8] the author or speaker assumes cultural or social knowledge [1-6] (explanation)
+[P9] the author or speaker assumes personal knowledge about himself/herself [1-6] (explanation)
+[P10] the purpose of the text is to narrate past events [1-6] (explanation)
+[P11] the purpose of the text is to explain information [1-6] (explanation)
+[P12] the purpose of the text is to describe a person, place, thing or idea [1-6] (explanation)
+[P13] the purpose of the text is to persuade the reader [1-6] (explanation)
+[P14] the purpose of the text is to entertain the reader [1-6] (explanation)
+[P15] the purpose of the text is to sell a product or service [1-6] (explanation)
+[P16] the purpose of the text is to give advice or recommendations [1-6] (explanation)
+[P17] the purpose of the text is to provide 'how-to' instructions [1-6] (explanation)
+[P18] the purpose of the text is to express opinions [1-6] (explanation)
+[P19] the basis of information is common knowledge [1-6] (explanation)
+[P20] The basis of information is direct quotes [1-6] (explanation)
+[P21] The basis of information is factual or scientific evidence [1-6] (explanation)
+[P22] The basis of information is opinion [1-6] (explanation)
+[P23] The basis of information is personal experience [1-6] (explanation)
 
 For each of the 23 points, give a score from 1 to 6 based on the text you read. For each point, explain your given score very briefly, in one short sentence.
 
-Output your scores in the following format:
+In your output, strictly adhere to the following format:
 
-- Parameter Name [Score] (Explanation)
+[P1-23] Parameter Name [Your score] (Your explanation)
 
-Very importantly: keep parameter names EXACTLY as seen above (including the leading hyphen). Group them by category, exactly as seen above. Output score inside brackets and single-sentence explanation in parentheses. Strictly adhere to this output format in all parameter responses.
+In the first brackets, write the parameter number [P1 to P23], followed by the parameter name. Then, write your given score in brackets [1-6]. Finally, write your explanation in parentheses ().
+
+Strictly adhere to this output format in all parameter responses. Make sure to fill in ALL parameters exactly as instructed above.
 """
 
-MESSAGE = """Read the following text and code register characteristics based on its contents, using the 23-point category specified in your system prompt, with a scale of 1 (Disagree completely) to 6 (Agree completely).
+MESSAGE = """Read the following text (enclosed within ``` and ```) and code register characteristics based on its contents, using the 23-point category specified in your system prompt, with a scale of 1 (Disagree completely) to 6 (Agree completely).
 
 ```{}```
 
@@ -66,46 +57,37 @@ MESSAGE = """Read the following text and code register characteristics based on 
 
 Here are the 23 parameters you will be coding for:
 
-**The text is:**
+[P1] the text is a spoken transcript [1-6] (explanation)
+[P2] the text is lyrical or artistic [1-6] (explanation)
+[P3] the text is pre-planned and edited [1-6] (explanation)
+[P4] the text is interactive [1-6] (explanation)
+[P5] the author or speaker is an expert [1-6] (explanation)
+[P6] the author or speaker focuses on himself/herself [1-6] (explanation)
+[P7] the author or speaker assumes technical background knowledge [1-6] (explanation)
+[P8] the author or speaker assumes cultural or social knowledge [1-6] (explanation)
+[P9] the author or speaker assumes personal knowledge about himself/herself [1-6] (explanation)
+[P10] the purpose of the text is to narrate past events [1-6] (explanation)
+[P11] the purpose of the text is to explain information [1-6] (explanation)
+[P12] the purpose of the text is to describe a person, place, thing or idea [1-6] (explanation)
+[P13] the purpose of the text is to persuade the reader [1-6] (explanation)
+[P14] the purpose of the text is to entertain the reader [1-6] (explanation)
+[P15] the purpose of the text is to sell a product or service [1-6] (explanation)
+[P16] the purpose of the text is to give advice or recommendations [1-6] (explanation)
+[P17] the purpose of the text is to provide 'how-to' instructions [1-6] (explanation)
+[P18] the purpose of the text is to express opinions [1-6] (explanation)
+[P19] the basis of information is common knowledge [1-6] (explanation)
+[P20] The basis of information is direct quotes [1-6] (explanation)
+[P21] The basis of information is factual or scientific evidence [1-6] (explanation)
+[P22] The basis of information is opinion [1-6] (explanation)
+[P23] The basis of information is personal experience [1-6] (explanation)
 
-- a spoken transcript [1-6]
-- lyrical or artistic [1-6]
-- pre-planned and edited [1-6]
-- interactive [1-6]
+For each of the 23 points, give a score from 1 to 6 based on the text given above (enclosed within ``` and ```). For each point, explain your given score very briefly, in one short sentence.
 
-**The author/speaker:**
+In your output, strictly adhere to the following format:
 
-- is an expert [1-6]
-- focuses on himself/herself [1-6]
-- assumes technical background knowledge [1-6]
-- assumes cultural/social knowledge [1-6]
-- assumes personal knowledge about himself/herself [1-6]
+[P1-23] Parameter Name [Your score] (Your explanation)
 
-**The purpose of this text is to:**
+In the first brackets, write the parameter number [P1 to P23], followed by the parameter name. Then, write your given score in brackets [1-6]. Finally, write your explanation in parentheses ().
 
-- narrate past events [1-6]
-- explain information [1-6]
-- describe a person, place, thing or idea [1-6]
-- persuade the reader [1-6]
-- entertain the reader [1-6]
-- sell a product or service [1-6]
-- give advice or recommendations [1-6]
-- provide 'how-to' instructions [1-6]
-- express opinions [1-6]
-
-**The basis of information is:**
-
-- common knowledge [1-6]
-- direct quotes [1-6]
-- factual/scientific evidence [1-6]
-- opinion [1-6]
-- personal experience [1-6]
-
-For each of the 23 points, give a score from 1 to 6 based on the text you read. For each point, explain your given score very briefly, in one short sentence.
-
-Output your scores in the following format:
-
-- Parameter Name [Score] (Explanation)
-
-Very importantly: keep parameter names EXACTLY as seen above (including the leading hyphen). Group them by category, exactly as seen above. Output score inside brackets and single-sentence explanation in parentheses. Strictly adhere to this output format in all parameter responses.
+Strictly adhere to this output format in all parameter responses. Make sure to fill in ALL parameters exactly as instructed above.
 """

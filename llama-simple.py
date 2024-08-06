@@ -22,7 +22,9 @@ model_id = "meta-llama/Meta-Llama-3.1-8B-Instruct"
 
 # Load tokenizer and model from Hugging Face Hub (requires access token)
 tokenizer = AutoTokenizer.from_pretrained(model_id, token=access_token)
-model = AutoModelForCausalLM.from_pretrained(model_id, token=access_token)
+model = AutoModelForCausalLM.from_pretrained(
+    model_id, token=access_token, torch_dtype=torch.bfloat16, device_map="auto"
+)
 
 # Move the model to GPU if available, otherwise CPU
 if torch.cuda.is_available():
