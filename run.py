@@ -9,6 +9,7 @@ import time
 import prompts
 
 import subprocess
+import select
 
 # Set up your environment variables
 env = os.environ.copy()
@@ -21,8 +22,10 @@ command = "/users/ehenriks/bin/ollama serve"
 # Split the command
 cmd = command.split()
 
-# Start the subprocess in the background, passing the custom environment
-proc = subprocess.Popen(cmd, env=env)
+# Open a file to collect output
+with open("ollama.txt", "w") as outfile:
+    # Start the subprocess in the background, redirecting stdout and stderr
+    proc = subprocess.Popen(cmd, stdout=outfile, stderr=subprocess.STDOUT, env=env)
 
 
 model_name = "situationalcharacteristics"
@@ -170,6 +173,7 @@ while tries < max_tries:
         print("Model generation completed successfully.")
         break
     tries += 1
+    print("Tried to generate...")
     time.sleep(5)
 else:
     print("Failed to generate model after 20 attempts.")
