@@ -158,7 +158,9 @@ input_file = f"{input_path}/{io_file}"
 max_tries = 20
 tries = 0
 
-print("here")
+print("waiting 30 seconds just to be sure")
+time.sleep(30)
+print("done")
 
 while tries < max_tries:
     if generate_model() == 1:
