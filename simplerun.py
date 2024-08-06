@@ -65,39 +65,12 @@ def dict_values_to_string(d):
 
 
 def parse_llm_output(text):
-    # Split the text into lines
-    lines = text.strip().split("\n")
+    # Process the output here!
 
-    # Regular expression pattern to match the format
-    pattern = r"- (.*?) \[(.*?)\] \((.*?)\)"
-
-    # Dictionary to store the results
-    result = {key: 0 for key in sit_char_params.keys()}
-
-    for line in lines:
-        match = re.match(pattern, line)
-        if match:
-            parameter, score, explanation = match.groups()
-            # Remove the leading hyphen and space from the parameter name
-            parameter = parameter.lstrip("- ")
-            if parameter in result:
-                # result[parameter] = {"score": int(score), "explanation": explanation}
-                result[parameter] = int(score)
-            else:
-                print('Error: "{}" not found in the parameters'.format(parameter))
-                print("Full response: ", text)
-                exit()
-
-    if any(value == 0 for value in result.values()):
-        print()
-        print("Warn: Some parameters are missing")
-        print("Full response: ", text)
-        print(result)
-
-    return result
+    return text
 
 
-def generate_model():
+def make_model():
     try:
         url = "http://localhost:11434/api/create"
         modelfile = f'''
@@ -110,8 +83,6 @@ def generate_model():
             "modelfile": modelfile,
         }
         response = requests.post(url, json=payload)
-
-        print(response.text)
 
         if response.status_code == 200:
             return 1

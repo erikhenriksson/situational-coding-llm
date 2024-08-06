@@ -2,6 +2,7 @@ import os
 import prompts
 import csv
 import gzip
+import re
 
 os.environ["HF_HOME"] = ".hf/hf_home"
 os.environ["XDG_CACHE_HOME"] = ".hf/xdg_cache_home"
@@ -11,13 +12,13 @@ os.environ["WANDB_DISABLED"] = "true"
 import torch
 from dotenv import load_dotenv
 from huggingface_hub import login
-from transformers import AutoModelForCausalLM, AutoTokenizer, AwqConfig
+from transformers import AutoModelForCausalLM, AutoTokenizer, AwqConfig, pipeline
 
 load_dotenv()
 
 login(token=os.getenv("HUGGINGFACE_ACCESS_TOKEN", ""))
 
-
+"""
 model_id = "hugging-quants/Meta-Llama-3.1-70B-Instruct-AWQ-INT4"
 quantization_config = AwqConfig(
     bits=4,
@@ -33,6 +34,31 @@ model = AutoModelForCausalLM.from_pretrained(
     device_map="auto",
     quantization_config=quantization_config,
 )
+"""
+
+"""
+# Load the model and tokenizer
+model_id = "meta-llama/Meta-Llama-3.1-70B-Instruct"
+model = AutoModelForCausalLM.from_pretrained(model_id, torch_dtype=torch.float16)
+tokenizer = AutoTokenizer.from_pretrained(model_id)
+
+# Move the model to GPU
+device = "cuda" if torch.cuda.is_available() else "cpu"
+model.to(device)
+
+"""
+
+model_id = "meta-llama/Meta-Llama-3.1-70B-Instruct"
+pipe = pipeline(
+    "text-generation",
+    model=model_id,
+    model_kwargs={
+        "torch_dtype": torch.bfloat16,
+        "quantization_config": {"load_in_4bit": True},
+    },
+    device_map="auto",
+)
+
 
 sit_char_params = {
     "a spoken transcript": 0,
@@ -106,6 +132,7 @@ def generate(text):
         },
         {"role": "user", "content": prompts.MESSAGE.format(text)},
     ]
+    """
     inputs = tokenizer.apply_chat_template(
         prompt,
         tokenize=True,
@@ -121,7 +148,18 @@ def generate(text):
         outputs[:, inputs["input_ids"].shape[1] :], skip_special_tokens=True
     )[0]
 
-    result = parse_llm_output(output_parsed)
+    """
+
+    outputs = pipe(
+        prompt,
+        max_new_tokens=1024,
+        do_sample=True,
+        temperature=0.01,
+    )
+    assistant_response = outputs[0]["generated_text"][-1]["content"]
+    # print(assistant_response)
+
+    result = parse_llm_output(assistant_response)
 
     return result
 
