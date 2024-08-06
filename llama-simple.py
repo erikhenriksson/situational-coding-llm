@@ -29,7 +29,7 @@ model = AutoModelForCausalLM.from_pretrained(
 
 
 def generate_responses(contexts):
-    prompts = [
+    messages = [
         [
             {"role": "system", "content": prompts.SYSTEM},
             {"role": "user", "content": prompts.MESSAGE.format(context)},
@@ -39,7 +39,7 @@ def generate_responses(contexts):
 
     # Tokenize the batch of prompts
     inputs = tokenizer.apply_chat_template(
-        prompts,
+        messages,
         tokenize=True,
         add_generation_prompt=True,
         return_tensors="pt",
