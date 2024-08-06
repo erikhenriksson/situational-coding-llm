@@ -45,25 +45,22 @@ def generate_response(context):
         {"role": "user", "content": prompts.MESSAGE.format(context)},
     ]
 
-    input_ids = tokenizer.apply_chat_template(prompt, return_tensors="pt")
+    inputs = tokenizer.apply_chat_template(
+        prompt,
+        tokenize=True,
+        add_generation_prompt=True,
+        return_tensors="pt",
+        return_dict=True,
+    ).to("cuda")
 
-    if input_ids.shape[1] > MAX_INPUT_TOKEN_LENGTH:
-        input_ids = input_ids[:, -MAX_INPUT_TOKEN_LENGTH:]
+    outputs = model.generate(
+        **inputs, do_sample=False, temperature=0, max_new_tokens=512
+    )
+    output_parsed = tokenizer.batch_decode(
+        outputs[:, inputs["input_ids"].shape[1] :], skip_special_tokens=True
+    )[0]
 
-    input_ids = input_ids.to(model.device)
-
-    generate_kwargs = {
-        "input_ids": input_ids,
-        "max_length": 512 + input_ids.shape[1],  # Adjust for total length
-        "do_sample": False,
-        "temperature": 0,
-        "eos_token_id": terminators,  # Specify tokens to stop generation
-    }
-
-    output = model.generate(**generate_kwargs)[0]
-    response = tokenizer.decode(output, skip_special_tokens=True)
-
-    return response
+    return output_parsed
 
 
 def process_tsv_file(input_file, output_file):
