@@ -145,6 +145,7 @@ def process_tsv_file(input_file, output_file):
             register, text = row
             score = scores[i]
             explanation = explanations[i]
+            print(register, score, explanation, text[:50])
             writer.writerow([register, score, explanation, text])
 
     with gzip.open(input_file, "rt", encoding="utf-8") as infile, open(
