@@ -92,24 +92,26 @@ def parse_llm_output(text):
 
 
 def generate_model():
+    try:
+        url = "http://localhost:11434/api/create"
+        modelfile = f'''
+                FROM llama3.1:70b
+                PARAMETER temperature 0.01
+                SYSTEM """{prompts.SYSTEM}"""
+            '''
+        payload = {
+            "name": model_name,
+            "modelfile": modelfile,
+        }
+        response = requests.post(url, json=payload)
 
-    url = "http://localhost:11434/api/create"
-    modelfile = f'''
-            FROM llama3.1:70b
-            PARAMETER temperature 0.01
-            SYSTEM """{prompts.SYSTEM}"""
-        '''
-    payload = {
-        "name": model_name,
-        "modelfile": modelfile,
-    }
-    response = requests.post(url, json=payload)
+        print(response.text)
 
-    print(response.text)
-
-    if response.status_code == 200:
-        return 1
-    else:
+        if response.status_code == 200:
+            return 1
+        else:
+            return 0
+    except:
         return 0
 
 
@@ -140,6 +142,8 @@ def process_tsv_file(input_file, output_file):
 
         for row in reader:
             register, text = row
+            # print processing register and first 10 chars of text
+            print(register, text[:10])
             sit_char = gen_sit_char(text[:5000])
             sit_char_str = dict_values_to_string(sit_char)
             print(register, sit_char_str)
