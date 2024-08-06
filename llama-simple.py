@@ -107,7 +107,7 @@ def process_tsv_file(input_file, output_file):
         last_row = reader_temp[-1][-1]
 
     with gzip.open(input_file, "rt", encoding="utf-8") as infile, open(
-        output_file.replace(".gz", ""), "w", newline=""
+        output_file, "a", newline=""
     ) as outfile:
         reader = csv.reader(infile, delimiter="\t")
         writer = csv.writer(outfile, delimiter="\t")
