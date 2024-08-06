@@ -25,7 +25,7 @@ cmd = command.split()
 proc = subprocess.Popen(cmd, env=env)
 
 
-model_name = "situational-characteristics"
+model_name = "situationalcharacteristics"
 
 sit_char_params = {
     "a spoken transcript": 0,
