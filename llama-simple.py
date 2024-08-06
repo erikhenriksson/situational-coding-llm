@@ -30,7 +30,7 @@ tokenizer = AutoTokenizer.from_pretrained(model_id, token=access_token)
 model = AutoModelForCausalLM.from_pretrained(
     model_id,
     token=access_token,
-    # torch_dtype=torch.bfloat16,
+    torch_dtype=torch.bfloat16,
     device_map="auto",
     quantization_config=quantization_config,
 )
@@ -55,13 +55,23 @@ def generate_response(context):
     ).to("cuda")
 
     outputs = model.generate(
-        **inputs, do_sample=True, temperature=0.01, max_new_tokens=1024
+        **inputs, do_sample=True, temperature=0.0, max_new_tokens=1024
     )
-    output_parsed = tokenizer.batch_decode(
+    model_output = tokenizer.batch_decode(
         outputs[:, inputs["input_ids"].shape[1] :], skip_special_tokens=True
     )[0]
 
-    return output_parsed
+    # Extract scores from the text
+    scores = []
+    try:
+        for line in model_output.strip().split("\n"):
+            score = int(line.split("[")[2].split("]")[0])
+            scores.append(score)
+    except:
+        print('Error parsing this output: "{}"'.format(model_output))
+        exit()
+
+    return model_output, scores
 
 
 def process_tsv_file(input_file, output_file):
@@ -74,7 +84,7 @@ def process_tsv_file(input_file, output_file):
         for row in reader:
             register, text = row
             model_output = generate_response(text[:5000])
-            print(model_output)
+            print(model_output, scores)
             exit()
 
             sit_char_str = dict_values_to_string(sit_char)
