@@ -95,7 +95,7 @@ def generate_model():
 
     url = "http://localhost:11434/api/create"
     modelfile = f'''
-            FROM llama3.1-70b
+            FROM llama3.1:70b
             PARAMETER temperature 0.01
             SYSTEM """{prompts.SYSTEM}"""
         '''
