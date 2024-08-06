@@ -159,8 +159,8 @@ def process_tsv_file(input_file, output_file):
             batch.append(row)
             if len(batch) == batch_size:
                 texts = [text[:max_text_len] for _, text in batch]
-                batch_outputs = generate_responses(texts)
-                write_batch_results(batch, batch_outputs, writer)
+                scores, explanations = generate_responses(texts)
+                write_batch_results(batch, scores, explanations, writer)
                 batch = []
                 outfile.flush()
         # Process any remaining rows in the last batch
