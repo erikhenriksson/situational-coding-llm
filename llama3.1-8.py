@@ -18,36 +18,6 @@ load_dotenv()
 
 login(token=os.getenv("HUGGINGFACE_ACCESS_TOKEN", ""))
 
-"""
-model_id = "hugging-quants/Meta-Llama-3.1-70B-Instruct-AWQ-INT4"
-quantization_config = AwqConfig(
-    bits=4,
-    fuse_max_seq_len=10000,  # Note: Update this as per your use-case
-    do_fuse=True,
-)
-
-tokenizer = AutoTokenizer.from_pretrained(model_id)
-model = AutoModelForCausalLM.from_pretrained(
-    model_id,
-    torch_dtype=torch.float16,
-    low_cpu_mem_usage=True,
-    device_map="auto",
-    quantization_config=quantization_config,
-)
-"""
-
-"""
-# Load the model and tokenizer
-model_id = "meta-llama/Meta-Llama-3.1-70B-Instruct"
-model = AutoModelForCausalLM.from_pretrained(model_id, torch_dtype=torch.float16)
-tokenizer = AutoTokenizer.from_pretrained(model_id)
-
-# Move the model to GPU
-device = "cuda" if torch.cuda.is_available() else "cpu"
-model.to(device)
-
-"""
-
 model_id = "meta-llama/Meta-Llama-3.1-8B-Instruct"
 pipe = pipeline(
     "text-generation",
