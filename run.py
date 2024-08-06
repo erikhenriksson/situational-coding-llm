@@ -3,8 +3,21 @@ import json
 import re
 
 import requests
+import time
 
 import prompts
+
+import subprocess
+
+# Define the commands to be run
+commands = """
+export OLLAMA_TMPDIR=/scratch/project_2010911/ollama
+export OLLAMA_MODELS=/scratch/project_2010911/ollama
+/users/ehenriks/bin/ollama serve &
+"""
+
+# Use Popen to run the commands in a shell
+process = subprocess.Popen(commands, shell=True, executable="/bin/bash")
 
 model_name = "situational-characteristics"
 
@@ -127,7 +140,17 @@ input_path = "/scratch/project_2010911/multilingual-CORE"
 io_file = "fi/train.tsv"
 input_file = f"{input_path}/{io_file}"
 
-if generate_model():
-    process_tsv_file(input_file, io_file)
+# Loop until generate_model returns 1 or tries exceed 20
+max_tries = 20
+tries = 0
+
+while tries < max_tries:
+    if generate_model() == 1:
+        print("Model generation completed successfully.")
+        break
+    tries += 1
+    time.sleep(5)
 else:
-    print("Model generation failed")
+    print("Failed to generate model after 20 attempts.")
+    exit()
+process_tsv_file(input_file, io_file)
