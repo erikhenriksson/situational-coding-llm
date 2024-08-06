@@ -169,14 +169,15 @@ print("done")
 
 
 while tries < max_tries:
+    print("Trying to generate model")
     if generate_model() == 1:
         print("Model generation completed successfully.")
         break
     tries += 1
-    print("Tried to generate...")
     time.sleep(5)
 else:
     print("Failed to generate model after 20 attempts.")
     exit()
 
+print("starting to process")
 process_tsv_file(input_file, io_file)
