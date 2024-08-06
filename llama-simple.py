@@ -5,8 +5,6 @@ import gzip
 import re
 
 os.environ["HF_HOME"] = ".hf/hf_home"
-os.environ["XDG_CACHE_HOME"] = ".hf/xdg_cache_home"
-os.environ["HF_DATASETS_CACHE"] = ".hf/datasets_cache"
 os.environ["WANDB_DISABLED"] = "true"
 
 import torch
@@ -18,14 +16,8 @@ load_dotenv()
 
 access_token = os.getenv("HUGGINGFACE_ACCESS_TOKEN", "")
 
-# Model ID from Hugging Face Hub
 model_id = "meta-llama/Meta-Llama-3.1-8B-Instruct"
-
-
 quantization_config = BitsAndBytesConfig(load_in_8bit=True)
-
-
-# Load tokenizer and model from Hugging Face Hub (requires access token)
 tokenizer = AutoTokenizer.from_pretrained(model_id, token=access_token)
 model = AutoModelForCausalLM.from_pretrained(
     model_id,
@@ -55,7 +47,7 @@ def generate_response(context):
     ).to("cuda")
 
     outputs = model.generate(
-        **inputs, do_sample=True, temperature=0.0, max_new_tokens=1024
+        **inputs, do_sample=True, temperature=0.01, max_new_tokens=1024
     )
     model_output = tokenizer.batch_decode(
         outputs[:, inputs["input_ids"].shape[1] :], skip_special_tokens=True
