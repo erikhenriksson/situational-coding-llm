@@ -26,15 +26,6 @@ model = AutoModelForCausalLM.from_pretrained(
     model_id, token=access_token, torch_dtype=torch.bfloat16, device_map="auto"
 )
 
-# Define conversation termination tokens
-terminators = [
-    tokenizer.eos_token_id,  # End-of-sentence token
-    tokenizer.convert_tokens_to_ids("<|eot_id|>"),  # Custom end-of-conversation token
-]
-
-# Maximum allowed input token length
-MAX_INPUT_TOKEN_LENGTH = 4096
-
 
 def generate_response(context):
     prompt = [
@@ -54,7 +45,7 @@ def generate_response(context):
     ).to("cuda")
 
     outputs = model.generate(
-        **inputs, do_sample=False, temperature=0, max_new_tokens=512
+        **inputs, do_sample=False, temperature=0, max_new_tokens=1024
     )
     output_parsed = tokenizer.batch_decode(
         outputs[:, inputs["input_ids"].shape[1] :], skip_special_tokens=True
