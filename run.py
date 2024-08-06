@@ -17,10 +17,10 @@ env["OLLAMA_MODELS"] = "/scratch/project_2010911/ollama"
 # Define the command to run
 command = "/users/ehenriks/bin/ollama serve > ollama_output.log 2>&1"
 
-# Start the subprocess in the background
-process = subprocess.Popen(
-    command, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT
-)
+cmd = command.split()
+subprocess.call(cmd, shell=False)
+
+
 model_name = "situational-characteristics"
 
 sit_char_params = {
@@ -123,8 +123,8 @@ def gen_sit_char(text):
 
 
 def process_tsv_file(input_file, output_file):
-    with open(input_file, "r", newline="") as infile, open(
-        output_file, "a", newline=""
+    with gzip.open(input_file, "rt", encoding="utf-8") as infile, open(
+        output_file.replace(".gz", ""), "w", newline=""
     ) as outfile:
         reader = csv.reader(infile, delimiter="\t")
         writer = csv.writer(outfile, delimiter="\t")
@@ -139,12 +139,15 @@ def process_tsv_file(input_file, output_file):
 
 
 input_path = "/scratch/project_2010911/multilingual-CORE"
-io_file = "fi/train.tsv"
+io_file = "fi/train.tsv.gz"
 input_file = f"{input_path}/{io_file}"
+
 
 # Loop until generate_model returns 1 or tries exceed 20
 max_tries = 20
 tries = 0
+
+print("here")
 
 while tries < max_tries:
     if generate_model() == 1:
@@ -155,4 +158,5 @@ while tries < max_tries:
 else:
     print("Failed to generate model after 20 attempts.")
     exit()
+
 process_tsv_file(input_file, io_file)
