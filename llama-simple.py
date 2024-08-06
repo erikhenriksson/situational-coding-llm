@@ -18,12 +18,16 @@ load_dotenv()
 access_token = os.getenv("HUGGINGFACE_ACCESS_TOKEN", "")
 
 # Model ID from Hugging Face Hub
-model_id = "meta-llama/Meta-Llama-3.1-8B-Instruct"
+model_id = "meta-llama/Meta-Llama-3.1-70B-Instruct"
 
 # Load tokenizer and model from Hugging Face Hub (requires access token)
 tokenizer = AutoTokenizer.from_pretrained(model_id, token=access_token)
 model = AutoModelForCausalLM.from_pretrained(
-    model_id, token=access_token, torch_dtype=torch.bfloat16, device_map="auto"
+    model_id,
+    token=access_token,
+    torch_dtype=torch.bfloat16,
+    device_map="auto",
+    load_in_4bit="70" in model_id,
 )
 
 
@@ -45,7 +49,7 @@ def generate_response(context):
     ).to("cuda")
 
     outputs = model.generate(
-        **inputs, do_sample=False, temperature=0, max_new_tokens=1024
+        **inputs, do_sample=True, temperature=0, max_new_tokens=1024
     )
     output_parsed = tokenizer.batch_decode(
         outputs[:, inputs["input_ids"].shape[1] :], skip_special_tokens=True
