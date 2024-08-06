@@ -1,5 +1,5 @@
 import csv
-import json
+import os
 import re
 
 import requests
@@ -9,16 +9,18 @@ import prompts
 
 import subprocess
 
-# Define the commands to be run
-commands = """
-export OLLAMA_TMPDIR=/scratch/project_2010911/ollama
-export OLLAMA_MODELS=/scratch/project_2010911/ollama
-/users/ehenriks/bin/ollama serve &
-"""
+# Set up your environment variables
+env = os.environ.copy()
+env["OLLAMA_TMPDIR"] = "/scratch/project_2010911/ollama"
+env["OLLAMA_MODELS"] = "/scratch/project_2010911/ollama"
 
-# Use Popen to run the commands in a shell
-process = subprocess.Popen(commands, shell=True, executable="/bin/bash")
+# Define the command to run
+command = "/users/ehenriks/bin/ollama serve > ollama_output.log 2>&1"
 
+# Start the subprocess in the background
+process = subprocess.Popen(
+    command, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT
+)
 model_name = "situational-characteristics"
 
 sit_char_params = {
