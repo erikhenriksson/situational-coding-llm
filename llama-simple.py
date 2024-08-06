@@ -12,22 +12,27 @@ os.environ["WANDB_DISABLED"] = "true"
 import torch
 from dotenv import load_dotenv
 from transformers import AutoModelForCausalLM, AutoTokenizer
+from transformers import BitsAndBytesConfig
 
 load_dotenv()
 
 access_token = os.getenv("HUGGINGFACE_ACCESS_TOKEN", "")
 
 # Model ID from Hugging Face Hub
-model_id = "meta-llama/Meta-Llama-3.1-70B-Instruct"
+model_id = "meta-llama/Meta-Llama-3.1-8B-Instruct"
+
+
+quantization_config = BitsAndBytesConfig(load_in_8bit=True)
+
 
 # Load tokenizer and model from Hugging Face Hub (requires access token)
 tokenizer = AutoTokenizer.from_pretrained(model_id, token=access_token)
 model = AutoModelForCausalLM.from_pretrained(
     model_id,
     token=access_token,
-    torch_dtype=torch.bfloat16,
+    # torch_dtype=torch.bfloat16,
     device_map="auto",
-    load_in_4bit="70" in model_id,
+    quantization_config=quantization_config,
 )
 
 
@@ -46,10 +51,11 @@ def generate_response(context):
         add_generation_prompt=True,
         return_tensors="pt",
         return_dict=True,
+        attn_implementation="flash_attention_2",
     ).to("cuda")
 
     outputs = model.generate(
-        **inputs, do_sample=True, temperature=0, max_new_tokens=1024
+        **inputs, do_sample=True, temperature=0.01, max_new_tokens=1024
     )
     output_parsed = tokenizer.batch_decode(
         outputs[:, inputs["input_ids"].shape[1] :], skip_special_tokens=True
