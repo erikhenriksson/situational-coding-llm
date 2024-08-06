@@ -119,21 +119,29 @@ def generate_model():
 
 
 def gen_sit_char(text):
+    max_tries = 20
+    tries = 0
+    print("payload: ", prompts.MESSAGE.format(text))
     url = "http://localhost:11434/api/generate"
     payload = {
         "model": model_name,
         "prompt": prompts.MESSAGE.format(text),
         "stream": False,
     }
-    response = requests.post(url, json=payload)
-
-    if response.status_code == 200:
-        output = response.json()["response"]
-        result = parse_llm_output(output)
-
-        return result
+    while tries < max_tries:
+        print("trying to generate")
+        response = requests.post(url, json=payload)
+        if response.status_code == 200:
+            output = response.json()["response"]
+            result = parse_llm_output(output)
+            return result
+        else:
+            print("unsuccesful", response.text)
+        tries += 1
+        time.sleep(5)
     else:
-        print(response.text)
+        print("Failed to generate text after 20 attempts.")
+        exit()
 
 
 def process_tsv_file(input_file, output_file):
