@@ -15,10 +15,13 @@ env["OLLAMA_TMPDIR"] = "/scratch/project_2010911/ollama"
 env["OLLAMA_MODELS"] = "/scratch/project_2010911/ollama"
 
 # Define the command to run
-command = "/users/ehenriks/bin/ollama serve &"
+command = "/users/ehenriks/bin/ollama serve"
 
+# Split the command
+cmd = command.split()
 
-subprocess.call(command, shell=True)
+# Start the subprocess in the background
+proc = subprocess.Popen(cmd)
 
 
 model_name = "situational-characteristics"
