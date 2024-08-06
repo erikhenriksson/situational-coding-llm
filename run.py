@@ -129,6 +129,8 @@ def gen_sit_char(text):
         result = parse_llm_output(output)
 
         return result
+    else:
+        print(response.text)
 
 
 def process_tsv_file(input_file, output_file):
