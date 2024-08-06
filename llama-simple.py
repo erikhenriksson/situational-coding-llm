@@ -24,7 +24,7 @@ model = AutoModelForCausalLM.from_pretrained(
     token=access_token,
     # torch_dtype=torch.bfloat16,
     device_map="auto",
-    quantization_config=quantization_config,
+    #quantization_config=quantization_config,
 )
 
 if tokenizer.pad_token is None:
