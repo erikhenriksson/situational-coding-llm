@@ -39,7 +39,7 @@ def generate_responses(contexts):
 
     # Tokenize the batch of prompts with padding and truncation
     inputs = tokenizer.apply_chat_template(
-        prompts,
+        messages,
         tokenize=True,
         add_generation_prompt=True,
         return_tensors="pt",
