@@ -11,7 +11,7 @@ os.environ["WANDB_DISABLED"] = "true"
 
 import torch
 from dotenv import load_dotenv
-from transformers import AutoModelForCausalLM, AutoTokenizer, AwqConfig, pipeline
+from transformers import AutoModelForCausalLM, AutoTokenizer
 
 load_dotenv()
 
@@ -25,12 +25,6 @@ tokenizer = AutoTokenizer.from_pretrained(model_id, token=access_token)
 model = AutoModelForCausalLM.from_pretrained(
     model_id, token=access_token, torch_dtype=torch.bfloat16, device_map="auto"
 )
-
-# Move the model to GPU if available, otherwise CPU
-if torch.cuda.is_available():
-    model = model.to("cuda")
-else:
-    model = model.to("cpu")
 
 # Define conversation termination tokens
 terminators = [
