@@ -37,14 +37,16 @@ def generate_responses(contexts):
         for context in contexts
     ]
 
-    # Tokenize the batch of prompts
+    # Tokenize the batch of prompts with padding and truncation
     inputs = tokenizer.apply_chat_template(
-        messages,
+        prompts,
         tokenize=True,
         add_generation_prompt=True,
         return_tensors="pt",
         return_dict=True,
         attn_implementation="flash_attention_2",
+        padding=True,  # Enable padding
+        truncation=True,  # Enable truncation
     ).to("cuda")
 
     # Generate responses for the batch
