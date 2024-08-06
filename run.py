@@ -92,26 +92,24 @@ def parse_llm_output(text):
 
 
 def generate_model():
-    try:
-        url = "http://localhost:11434/api/create"
-        modelfile = f'''
+
+    url = "http://localhost:11434/api/create"
+    modelfile = f'''
             FROM llama3.1-70
             PARAMETER temperature 0.01
             SYSTEM """{prompts.SYSTEM}"""
         '''
-        payload = {
-            "name": model_name,
-            "modelfile": modelfile,
-        }
-        response = requests.post(url, json=payload)
+    payload = {
+        "name": model_name,
+        "modelfile": modelfile,
+    }
+    response = requests.post(url, json=payload)
 
-        print(response.text)
+    print(response.text)
 
-        if response.status_code == 200:
-            return 1
-        else:
-            return 0
-    except:
+    if response.status_code == 200:
+        return 1
+    else:
         return 0
 
 
@@ -161,6 +159,7 @@ tries = 0
 print("waiting 30 seconds just to be sure")
 time.sleep(30)
 print("done")
+
 
 while tries < max_tries:
     if generate_model() == 1:
