@@ -65,13 +65,14 @@ def generate_responses(contexts):
     for model_output in batch_outputs:
         # Extract scores from the text
         scores = []
-        try:
-            for line in model_output.strip().split("\n"):
+
+        for line in model_output.strip().split("\n"):
+            try:
                 score = str(int(line.split("[")[2].split("]")[0]))
                 scores.append(score)
-        except:
-            print('Error parsing this output: "{}"'.format(model_output))
-            exit()
+            except:
+                print("Error parsing this line:", line)
+                exit()
 
         scores_list.append(" ".join(scores))
 
