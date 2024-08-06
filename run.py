@@ -3,6 +3,7 @@ import os
 import re
 
 import requests
+import gzip
 import time
 
 import prompts
