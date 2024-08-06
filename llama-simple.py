@@ -83,7 +83,7 @@ def process_tsv_file(input_file, output_file):
 
         for row in reader:
             register, text = row
-            model_output = generate_response(text[:5000])
+            model_output, scores = generate_response(text[:5000])
             print(model_output, scores)
             exit()
 
