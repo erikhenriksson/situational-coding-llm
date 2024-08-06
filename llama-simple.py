@@ -62,21 +62,26 @@ def generate_responses(contexts):
         outputs[:, inputs["input_ids"].shape[1] :], skip_special_tokens=True
     )
     scores_list = []
+    explanations_list = []
     for model_output in batch_outputs:
         # Extract scores from the text
         scores = []
-
+        explanations = []
         for line in model_output.strip().split("\n"):
-            try:
-                score = str(int(line.split("[")[2].split("]")[0]))
-                scores.append(score)
-            except:
-                print("Error parsing this line:", line)
-                exit()
+            if line.strip().startswith("["):
+                try:
+                    score = str(int(line.split("[")[2].split("]")[0]))
+                    scores.append(score)
+                    explanation = line.split("(")[1].split(")")[0]
+                    explanations.append(explanation)
+                except:
+                    print("Error parsing this line:", line)
+                    exit()
 
         scores_list.append(" ".join(scores))
+        explanations_list.append("|".join(explanations))
 
-    return batch_outputs
+    return scores_list, explanations_list
 
 
 def generate_response(context):
@@ -135,11 +140,12 @@ max_text_len = 5000
 
 
 def process_tsv_file(input_file, output_file):
-    def write_batch_results(batch, batch_outputs, writer):
+    def write_batch_results(batch, scores, explanations, writer):
         for i, row in enumerate(batch):
             register, text = row
-            model_output = batch_outputs[i]
-            writer.writerow([register, model_output, text])
+            score = score[i]
+            explanation = explanations[i]
+            writer.writerow([register, score, explanation, text])
 
     with gzip.open(input_file, "rt", encoding="utf-8") as infile, open(
         output_file.replace(".gz", ""), "w", newline=""
@@ -155,12 +161,12 @@ def process_tsv_file(input_file, output_file):
                 batch_outputs = generate_responses(texts)
                 write_batch_results(batch, batch_outputs, writer)
                 batch = []
-        outfile.flush()
+                outfile.flush()
         # Process any remaining rows in the last batch
         if batch:
             texts = [text[:max_text_len] for _, text in batch]
-            batch_outputs = generate_responses(texts)
-            write_batch_results(batch, batch_outputs, writer)
+            scores, explanations = generate_responses(texts)
+            write_batch_results(batch, scores, explanations, writer)
 
         outfile.flush()
 
