@@ -21,8 +21,8 @@ command = "/users/ehenriks/bin/ollama serve"
 # Split the command
 cmd = command.split()
 
-# Start the subprocess in the background
-proc = subprocess.Popen(cmd)
+# Start the subprocess in the background, passing the custom environment
+proc = subprocess.Popen(cmd, env=env)
 
 
 model_name = "situational-characteristics"
