@@ -143,7 +143,7 @@ def process_tsv_file(input_file, output_file):
     def write_batch_results(batch, scores, explanations, writer):
         for i, row in enumerate(batch):
             register, text = row
-            score = score[i]
+            score = scores[i]
             explanation = explanations[i]
             writer.writerow([register, score, explanation, text])
 
