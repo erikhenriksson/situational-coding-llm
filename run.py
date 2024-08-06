@@ -88,22 +88,27 @@ def parse_llm_output(text):
 
 
 def generate_model():
-    url = "http://localhost:11434/api/create"
-    modelfile = f'''
-        FROM llama3.1-70
-        PARAMETER temperature 0.01
-        SYSTEM """{prompts.SYSTEM}"""
-    '''
-    payload = {
-        "name": model_name,
-        "modelfile": modelfile,
-    }
-    response = requests.post(url, json=payload)
+    try:
+        url = "http://localhost:11434/api/create"
+        modelfile = f'''
+            FROM llama3.1-70
+            PARAMETER temperature 0.01
+            SYSTEM """{prompts.SYSTEM}"""
+        '''
+        payload = {
+            "name": model_name,
+            "modelfile": modelfile,
+        }
+        response = requests.post(url, json=payload)
 
-    print(response.text)
+        print(response.text)
 
-    if response.status_code == 200:
-        return 1
+        if response.status_code == 200:
+            return 1
+        else:
+            return 0
+    except:
+        return 0
 
 
 def gen_sit_char(text):
