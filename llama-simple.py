@@ -2,7 +2,9 @@ import os
 import prompts
 import csv
 import gzip
-import re
+import sys
+
+csv.field_size_limit(sys.maxsize)
 
 os.environ["HF_HOME"] = ".hf/hf_home"
 os.environ["WANDB_DISABLED"] = "true"
