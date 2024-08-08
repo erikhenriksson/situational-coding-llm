@@ -102,11 +102,16 @@ def process_tsv_file(input_file, output_file):
 
     proc_rows = 0
     last_row = []
-    with open(output_file, "r", newline="") as outfile_temp:
-        reader_temp = [row for row in csv.reader(outfile_temp, delimiter="\t") if row]
-        proc_rows = len(reader_temp)
+    try:
+        with open(output_file, "r", newline="") as outfile_temp:
+            reader_temp = [
+                row for row in csv.reader(outfile_temp, delimiter="\t") if row
+            ]
+            proc_rows = len(reader_temp)
 
-        last_row = reader_temp[-1][-1]
+            last_row = reader_temp[-1][-1]
+    except:
+        pass
 
     with gzip.open(input_file, "rt", encoding="utf-8") as infile, open(
         output_file, "a", newline=""
@@ -117,6 +122,8 @@ def process_tsv_file(input_file, output_file):
         batch = []
         row_i = 1
         active = 0
+        if not proc_rows:
+            active = 1
         for row in reader:
 
             if active:
