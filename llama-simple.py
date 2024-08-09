@@ -153,7 +153,7 @@ def process_tsv_file(input_file, output_file):
 
 
 input_path = "/scratch/project_2010911/multilingual-CORE"
-io_file = "sv/train.tsv.gz"
+io_file = "fr/train.tsv.gz"
 input_file = f"{input_path}/{io_file}"
 output_file = io_file.replace(".tsv.gz", "") + f"_{model_file}"
 
