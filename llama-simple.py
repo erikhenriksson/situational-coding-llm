@@ -16,10 +16,12 @@ from transformers import BitsAndBytesConfig
 
 load_dotenv()
 
+core_path = os.getenv("CORE_PATH", "")
+language = sys.argv[1]
+core_file = sys.argv[2]
+base_dir = os.path.dirname(os.path.abspath(__file__))
 model_file = "llama-3.1-8b.tsv"
-
 access_token = os.getenv("HUGGINGFACE_ACCESS_TOKEN", "")
-
 model_id = "meta-llama/Meta-Llama-3.1-8B-Instruct"
 quantization_config = BitsAndBytesConfig(load_in_8bit=True)
 tokenizer = AutoTokenizer.from_pretrained(model_id, token=access_token)
@@ -91,7 +93,9 @@ def generate_responses(contexts):
     return scores_list, explanations_list
 
 
-def process_tsv_file(input_file, output_file):
+def process_tsv_file(input_file):
+    output_file = f"{base_dir}/{language}/{model_file}"
+
     def write_batch_results(batch, scores, explanations, writer):
         for i, row in enumerate(batch):
             register, text = row
@@ -152,10 +156,6 @@ def process_tsv_file(input_file, output_file):
         outfile.flush()
 
 
-input_path = "/scratch/project_2010911/multilingual-CORE"
-io_file = "fr/train.tsv.gz"
-input_file = f"{input_path}/{io_file}"
-output_file = io_file.replace(".tsv.gz", "") + f"_{model_file}"
+input_file = f"{core_path}/{language}/{core_file}"
 
-
-process_tsv_file(input_file, output_file)
+process_tsv_file(input_file)
