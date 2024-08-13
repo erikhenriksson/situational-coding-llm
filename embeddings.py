@@ -31,7 +31,7 @@ def embed(text):
         max_length=8192,  # If you don't need such a long length, you can set a smaller value to speed up the encoding process.
     )["dense_vecs"]
 
-    return " ".join(embedding)
+    return " ".join([str(x) for x in embedding])
 
 
 def process_tsv_file(input_file):
