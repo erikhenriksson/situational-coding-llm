@@ -2,6 +2,9 @@ import os
 import gzip
 import sys
 import csv
+import sys
+
+csv.field_size_limit(sys.maxsize)
 
 os.environ["HF_HOME"] = ".hf/hf_home"
 
@@ -56,8 +59,8 @@ def process_tsv_file(input_file):
         for row in reader:
             if active:
                 register, text = row
-                scores, explanations = embed(text[:5000])
-                writer.writerow([register, scores, explanations, text])
+                embedding = embed(text[:5000])
+                writer.writerow([register, embedding, text])
                 outfile.flush()  # Force write to disk
 
             if row_i == proc_rows:
