@@ -3,6 +3,7 @@ import gzip
 import sys
 import csv
 import sys
+from dotenv import load_dotenv
 
 csv.field_size_limit(sys.maxsize)
 
@@ -10,6 +11,7 @@ os.environ["HF_HOME"] = ".hf/hf_home"
 
 from FlagEmbedding import BGEM3FlagModel
 
+load_dotenv()
 
 core_path = os.getenv("CORE_PATH", "")
 language = sys.argv[1]
