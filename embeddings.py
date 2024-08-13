@@ -1,3 +1,7 @@
+import os
+
+os.environ["HF_HOME"] = ".hf/hf_home"
+
 from FlagEmbedding import FlagLLMModel
 
 queries = ["how much protein should a female eat", "summit define"]
