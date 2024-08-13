@@ -18,7 +18,7 @@ language = sys.argv[1]
 core_file = sys.argv[2]
 base_dir = os.path.dirname(os.path.abspath(__file__))
 model_name = "BAAI/bge-m3"
-model_file = model_name.replace("/", "_") + "_embeddings"
+model_file = model_name.replace("/", "_") + "_embeddings.tsv"
 
 model = BGEM3FlagModel(model_name, use_fp16=True)
 
