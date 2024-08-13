@@ -2,19 +2,23 @@ import os
 
 os.environ["HF_HOME"] = ".hf/hf_home"
 
-from FlagEmbedding import FlagLLMModel
+from FlagEmbedding import BGEM3FlagModel
 
-queries = ["how much protein should a female eat", "summit define"]
-documents = [
-    "As a general guideline, the CDC's average requirement of protein for women ages 19 to 70 is 46 grams per day. But, as you can see from this chart, you'll need to increase that if you're expecting or training for a marathon. Check out the chart below to see how much protein you should be eating each day.",
-    "Definition of summit for English Language Learners. : 1  the highest point of a mountain : the top of a mountain. : 2  the highest level. : 3  a meeting or series of meetings between the leaders of two or more governments.",
-]
-model = FlagLLMModel(
-    "BAAI/bge-multilingual-gemma2",
-    query_instruction_for_retrieval="Given a web search query, retrieve relevant passages that answer the query.",
-    use_fp16=True,
+model = BGEM3FlagModel(
+    "BAAI/bge-m3", use_fp16=True
 )  # Setting use_fp16 to True speeds up computation with a slight performance degradation
-embeddings_1 = model.encode_queries(queries)
-embeddings_2 = model.encode_corpus(documents)
+
+sentences_1 = ["What is BGE M3?", "Defination of BM25"]
+sentences_2 = [
+    "BGE M3 is an embedding model supporting dense retrieval, lexical matching and multi-vector interaction.",
+    "BM25 is a bag-of-words retrieval function that ranks a set of documents based on the query terms appearing in each document",
+]
+
+embeddings_1 = model.encode(
+    sentences_1,
+    batch_size=12,
+    max_length=8192,  # If you don't need such a long length, you can set a smaller value to speed up the encoding process.
+)["dense_vecs"]
+embeddings_2 = model.encode(sentences_2)["dense_vecs"]
 similarity = embeddings_1 @ embeddings_2.T
 print(similarity)
