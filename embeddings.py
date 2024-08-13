@@ -27,11 +27,11 @@ def embed(text):
 
     embedding = model.encode(
         [text],
-        batch_size=12,
+        # batch_size=1,
         max_length=8192,  # If you don't need such a long length, you can set a smaller value to speed up the encoding process.
     )["dense_vecs"]
 
-    embedding_str = " ".join([f"{x:.8f}" for x in embedding.flatten()])
+    embedding_str = " ".join([f"{x:.16f}" for x in embedding.flatten()])
     return embedding_str
 
 
