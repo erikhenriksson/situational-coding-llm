@@ -94,7 +94,7 @@ def generate_responses(contexts):
 
 
 def process_tsv_file(input_file):
-    output_file = f"{base_dir}/{language}/{model_file}"
+    output_file = f"{base_dir}/data/{language}/{model_file}"
 
     def write_batch_results(batch, scores, explanations, writer):
         for i, row in enumerate(batch):
