@@ -17,13 +17,27 @@ core_path = os.getenv("CORE_PATH", "")
 language = sys.argv[1]
 core_file = sys.argv[2]
 base_dir = os.path.dirname(os.path.abspath(__file__))
-model_name = "BAAI/bge-m3"
+# model_name = "BAAI/bge-m3"
+model_name = "BAAI/bge-multilingual-gemma2"
 model_file = model_name.replace("/", "_") + "_embeddings.tsv"
 
-model = BGEM3FlagModel(model_name, use_fp16=True)
+# model = BGEM3FlagModel(model_name, use_fp16=True)
+
+from sentence_transformers import SentenceTransformer
+import torch
+
+# Load the model, optionally in float16 precision for faster inference
+model = SentenceTransformer(
+    "BAAI/bge-multilingual-gemma2", model_kwargs={"torch_dtype": torch.float16}
+)
 
 
 def embed(text):
+
+    embedding = model.encode([text])
+
+    embedding_str = " ".join([f"{x:.16f}" for x in embedding.flatten()])
+    return embedding_str
 
     embedding = model.encode(
         [text],
