@@ -1,3 +1,8 @@
+import os
+
+os.environ["HF_HOME"] = ".hf/hf_home"
+
+
 import torch
 import torch.nn.functional as F
 
