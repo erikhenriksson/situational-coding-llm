@@ -27,10 +27,10 @@ model_name = "BAAI/bge-multilingual-gemma2"
 model_file = model_name.replace("/", "_") + "_embeddings.tsv"
 quantization_config = BitsAndBytesConfig(load_in_8bit=True)
 
-model = AutoModel.from_pretrained(
-    "BAAI/bge-multilingual-gemma2", quantization_config=quantization_config
-)
+model = AutoModel.from_pretrained(model_name, quantization_config=quantization_config)
 model.eval()
+
+tokenizer = AutoTokenizer.from_pretrained(model_name)
 
 
 def last_token_pool(last_hidden_states: Tensor, attention_mask: Tensor) -> Tensor:
