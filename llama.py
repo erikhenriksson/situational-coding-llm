@@ -96,6 +96,10 @@ def generate_responses(contexts):
 def process_tsv_file(input_file):
     output_file = f"{base_dir}/data/{language}/{model_file}"
 
+    # if "data/{language}" path does not exist, create it
+    if not os.path.exists(f"{base_dir}/data/{language}"):
+        os.makedirs(f"{base_dir}/data/{language}")
+
     def write_batch_results(batch, scores, explanations, writer):
         for i, row in enumerate(batch):
             register, text = row
@@ -156,6 +160,12 @@ def process_tsv_file(input_file):
         outfile.flush()
 
 
-input_file = f"{core_path}/{language}/{core_file}"
+if language == "small":
+    small_languages = ["ar", "ca", "es", "fa", "hi", "id", "jp", "no", "pt", "ur", "zh"]
+    for lang in small_languages:
+        input_file = f"{core_path}/{lang}/{lang}.tsv.gz"
+        process_tsv_file(input_file)
+else:
+    input_file = f"{core_path}/{language}/{core_file}"
 
-process_tsv_file(input_file)
+    process_tsv_file(input_file)
