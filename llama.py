@@ -98,12 +98,14 @@ def generate_responses(contexts):
 
 def process_tsv_file(input_file, lang=None):
     if lang:
-        language = lang
-    output_file = f"{base_dir}/data/{language}/{model_file}"
+        cur_language = lang
+    else:
+        cur_language = language
+    output_file = f"{base_dir}/data/{cur_language}/{model_file}"
 
     # if "data/{language}" path does not exist, create it
-    if not os.path.exists(f"{base_dir}/data/{language}"):
-        os.makedirs(f"{base_dir}/data/{language}")
+    if not os.path.exists(f"{base_dir}/data/{cur_language}"):
+        os.makedirs(f"{base_dir}/data/{cur_language}")
 
     def write_batch_results(batch, scores, explanations, writer):
         for i, row in enumerate(batch):
