@@ -93,7 +93,9 @@ def generate_responses(contexts):
     return scores_list, explanations_list
 
 
-def process_tsv_file(input_file):
+def process_tsv_file(input_file, lang=None):
+    if lang:
+        language = lang
     output_file = f"{base_dir}/data/{language}/{model_file}"
 
     # if "data/{language}" path does not exist, create it
@@ -164,7 +166,7 @@ if language == "small":
     small_languages = ["ar", "ca", "es", "fa", "hi", "id", "jp", "no", "pt", "ur", "zh"]
     for lang in small_languages:
         input_file = f"{core_path}/{lang}/{lang}.tsv.gz"
-        process_tsv_file(input_file)
+        process_tsv_file(input_file, lang=lang)
 else:
     input_file = f"{core_path}/{language}/{core_file}"
 
