@@ -79,7 +79,10 @@ def generate_responses(contexts):
         for line in model_output.strip().split("\n"):
             if line.strip().startswith("["):
                 try:
-                    score = str(int(line.split("[")[2].split("]")[0]))
+                    try:
+                        score = str(int(line.split("[")[2].split("]")[0]))
+                    except:
+                        score = str(int(line.split("[")[2].split("]")[0].split("-")[0]))
                     scores.append(score)
                     explanation = line.split("(")[1].split(")")[0]
                     explanations.append(explanation)
